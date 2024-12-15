@@ -12,10 +12,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.LocalContentColor
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedCard
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -48,47 +45,49 @@ fun CustomTextField(
         modifier = modifier
             .fillMaxWidth()
             .onFocusEvent { state -> focusState = state.hasFocus },
-        textStyle = textStyle,
+        textStyle = textStyle.copy(color = MaterialTheme.colorScheme.onSurface),
         value = value,
         singleLine = singleLine,
         keyboardActions = keyboardActions,
         keyboardOptions = keyboardOptions,
         onValueChange = onValueChange,
         decorationBox = { innerTextField ->
-            Box(modifier = Modifier.fillMaxSize()) {
-                OutlinedCard(
-                    modifier = Modifier.fillMaxSize()
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(horizontal = 8.dp, vertical = 12.dp)
+            Surface {
+                Box(modifier = Modifier.fillMaxSize()) {
+                    OutlinedCard(
+                        modifier = Modifier.fillMaxSize()
                     ) {
-                        Row(
+                        Box(
                             modifier = Modifier
-                                .fillMaxWidth(),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.SpaceBetween
+                                .fillMaxSize()
+                                .padding(horizontal = 8.dp, vertical = 12.dp)
                         ) {
                             Row(
-                                modifier = Modifier.weight(1f),
+                                modifier = Modifier
+                                    .fillMaxWidth(),
                                 verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                horizontalArrangement = Arrangement.SpaceBetween
                             ) {
-                                leadingIcon()
-                                if (value.isEmpty()){
-                                    Text(
-                                        text = placeHolder,
-                                        style = textStyle.copy(
-                                            color = LocalContentColor.current.copy(alpha = .6f)
+                                Row(
+                                    modifier = Modifier.weight(1f),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                ) {
+                                    leadingIcon()
+                                    if (value.isEmpty()){
+                                        Text(
+                                            text = placeHolder,
+                                            style = textStyle.copy(
+                                                color = LocalContentColor.current.copy(alpha = .6f)
+                                            )
                                         )
-                                    )
-                                    Spacer(modifier = Modifier.width(8.dp))
+                                        Spacer(modifier = Modifier.width(8.dp))
+                                    }
                                 }
+                                trailingIcon()
                             }
-                            trailingIcon()
+                            innerTextField()
                         }
-                        innerTextField()
                     }
                 }
             }

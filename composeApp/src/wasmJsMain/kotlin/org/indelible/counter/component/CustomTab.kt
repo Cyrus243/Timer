@@ -23,6 +23,7 @@ import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import org.indelible.counter.models.TimerOption
 
 // source: https://medium.com/make-apps-simple/custom-tabs-using-jetpack-compose-e6ff16f961ea
 
@@ -30,10 +31,10 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun CustomTab(
     selectedItemIndex: Int,
-    items: List<String>,
+    items: List<TimerOption>,
     modifier: Modifier = Modifier,
     tabWidth: Dp = 100.dp,
-    onClick: (index: Int) -> Unit,
+    onClick: (option: TimerOption) -> Unit,
 ) {
     val indicatorOffset: Dp by animateDpAsState(
         targetValue = tabWidth * selectedItemIndex,
@@ -58,15 +59,15 @@ fun CustomTab(
                 .padding(4.dp)
                 .clip(RoundedCornerShape(8.dp)),
         ) {
-            items.mapIndexed { index, text ->
+            items.mapIndexed { index, timerOption ->
                 val isSelected = index == selectedItemIndex
                 CustomTabItem(
                     isSelected = isSelected,
                     onClick = {
-                        onClick(index)
+                        onClick(timerOption)
                     },
                     tabWidth = tabWidth,
-                    text = text,
+                    text = timerOption.label,
                 )
             }
         }

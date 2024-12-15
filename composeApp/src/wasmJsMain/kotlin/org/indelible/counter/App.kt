@@ -4,38 +4,53 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.*
-import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.datetime.LocalTime
 import org.indelible.counter.component.CustomTab
-import org.indelible.counter.component.CustomTextField
-import org.indelible.counter.component.WheelPicker
-import org.indelible.counter.component.WheelTextPicker
-import org.indelible.counter.timer.TimerScreenContent
+import org.indelible.counter.models.TimerOption
+import org.indelible.counter.timers.TimerScreenContent
 import org.indelible.counter.theme.CustomMaterialTheme
+import org.indelible.counter.timers.CountdownConfiguration
+import org.indelible.counter.timers.TimerViewModel
+import org.indelible.counter.timers.TimerViewModelState
 
 @Composable
 fun App() {
+    val viewModel = remember { TimerViewModel() }
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
     var isDrawerSheetOpen by remember {
         mutableStateOf(false)
     }
 
     CustomMaterialTheme(darkTheme = true) {
-        Surface(modifier = Modifier.fillMaxSize()){
+        Surface {
             Box(modifier = Modifier.fillMaxSize()) {
-                TimerScreenContent()
+                TimerScreenContent(
+                    hours = uiState.currentTime.hour,
+                    minutes = uiState.currentTime.minute,
+                    seconds = uiState.currentTime.second,
+                    isRunning = !uiState.isPaused,
+                    onTimerReset = { viewModel.resetTimer() },
+                    onPlayPauseClick = {
+                        if (uiState.isPaused) {
+                            viewModel.resumeTimer()
+                        } else {
+                            viewModel.pauseTimer()
+                        }
+                    }
+                )
+
                 Row(
                     modifier = Modifier
                         .align(Alignment.TopEnd)
@@ -60,7 +75,16 @@ fun App() {
                         targetOffsetX = { fullWidth -> fullWidth }
                     )
                 ){
-                    CustomDrawerSheet(onClose = { isDrawerSheetOpen = false })
+                    CustomDrawerSheet(
+                        onClose = { isDrawerSheetOpen = false },
+                        onTabClick = { viewModel.updateTimerOption(it) },
+                        selectedTimerOption = uiState.timerOption,
+                        uiState = uiState,
+                        updateNote = { viewModel.updateNote(it) },
+                        updateTitle = { viewModel.updateTitle(it) },
+                        updateSetTime = { viewModel.updateSetTime(it) },
+                        startCounting = { viewModel.startCounting() }
+                    )
                 }
             }
         }
@@ -68,196 +92,68 @@ fun App() {
 }
 
 @Composable
-fun CustomDrawerSheet(onClose: () -> Unit){
-
-    var (selectedTabIndex, setSelectedIndex) = remember {
-        mutableStateOf(0)
-    }
-
-    val tabList = remember {
-        mutableStateListOf("Countdown", "Chronometer", "Concentration mode")
-    }
-    Box(
-        modifier = Modifier.fillMaxHeight()
-    ) {
-        Surface(
-            modifier = Modifier
-                .fillMaxHeight()
-                .requiredWidth(400.dp),
-            shape = RoundedCornerShape(topStart = 16.dp, bottomStart = 16.dp),
-            shadowElevation = DrawerDefaults.ModalDrawerElevation
-        ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .requiredWidth(400.dp)
-                    .padding(16.dp)
-            ){
-                Column(
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    IconButton(
-                        modifier = Modifier.align(Alignment.End),
-                        onClick = onClose
-                    ){
-                        Icon(imageVector = Icons.Default.Close, contentDescription = null)
-                    }
-
-                    CustomTab(
-                        modifier = Modifier.align(Alignment.CenterHorizontally),
-                        selectedItemIndex = selectedTabIndex,
-                        items = tabList,
-                        onClick = { index -> setSelectedIndex(index) }
-                    )
-                    Spacer(modifier = Modifier.height(24.dp))
-
-                    Text(
-                        text = "Timer title",
-                        style = MaterialTheme.typography.titleSmall
-                    )
-                    Spacer(modifier = Modifier.height(4.dp))
-
-                    CustomTextField(
-                        value = "",
-                        onValueChange = {},
-                        placeHolder = "Timer name here!",
-                        textStyle = MaterialTheme.typography.bodySmall,
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    Text(
-                        text = "Description",
-                        style = MaterialTheme.typography.titleSmall
-                    )
-                    Spacer(modifier = Modifier.height(4.dp))
-
-                    CustomTextField(
-                        value = "",
-                        onValueChange = {},
-                        placeHolder = "Maybe a description here!",
-                        textStyle = MaterialTheme.typography.bodySmall,
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    Text(
-                        text = "Duration",
-                        style = MaterialTheme.typography.titleSmall
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    DurationSelector()
-                }
-
-                Row(
-                    modifier = Modifier.align(Alignment.BottomEnd),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    OutlinedButton(onClick = {}) {
-                        Text(text = "Cancel")
-                    }
-
-                    FilledTonalButton(onClick = {}) {
-                        Text(text = "Save")
-                    }
-                }
-            }
-
-        }
-    }
-}
-
-@Composable
-fun DurationSelector(){
-
-    Box(
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Surface(
-            modifier = Modifier
-                .align(Alignment.Center)
-                .fillMaxWidth()
-                .requiredHeight(46.dp),
-            shape = RoundedCornerShape(16.dp),
-            border = CardDefaults.outlinedCardBorder()
-        ) {}
-
-        Row(
-            modifier = Modifier.align(Alignment.Center),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
-        ) {
-            DurationItem(
-                value = "0",
-                unit = "hours",
-                count = HOURS_COUNT
-            )
-            VerticalDivider(modifier = Modifier.requiredHeight(46.dp))
-
-            DurationItem(
-                value = "0",
-                unit = "minutes",
-                count = MINUTES_COUNT
-            )
-            VerticalDivider(modifier = Modifier.requiredHeight(46.dp))
-
-            DurationItem(
-                value = "0",
-                unit = "seconds",
-                count = SECONDS_COUNT
-            )
-        }
-    }
-
-}
-
-@Composable
-fun DurationItem(
-    value: String,
-    unit: String,
-    count: Int,
+fun CustomDrawerSheet(
+    uiState: TimerViewModelState,
+    onClose: () -> Unit,
+    onTabClick: (TimerOption) -> Unit,
+    selectedTimerOption: TimerOption,
+    updateSetTime: (LocalTime) -> Unit,
+    updateTitle: (String) -> Unit,
+    updateNote: (String) -> Unit,
+    startCounting: () -> Unit,
 ){
-    var isSelected by remember {
-        mutableStateOf(false)
-    }
 
     Surface(
         modifier = Modifier
-            .padding(horizontal = 8.dp)
-            .clickable(
-                onClick = { isSelected = !isSelected },
-                interactionSource = remember { MutableInteractionSource() },
-                indication = null
-            )
+            .fillMaxHeight()
+            .requiredWidth(400.dp),
+        shape = RoundedCornerShape(topStart = 16.dp, bottomStart = 16.dp),
+        shadowElevation = DrawerDefaults.ModalDrawerElevation
     ) {
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalAlignment = Alignment.CenterVertically,
+
+        Column(
+            modifier = Modifier
+                .fillMaxHeight()
+                .padding(16.dp)
+                .requiredWidth(400.dp)
         ) {
-            AnimatedContent(isSelected){ state ->
-                if (state) {
-                    WheelTextPicker(count = count)
-                }else{
-                    Text(
-                        text = value,
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                }
+            IconButton(
+                modifier = Modifier.align(Alignment.End),
+                onClick = onClose
+            ){
+                Icon(imageVector = Icons.Default.Close, contentDescription = null)
             }
 
-            Text(
-                text = unit,
-                style = MaterialTheme.typography.bodyMedium.copy(
-                    color = LocalContentColor.current.copy(alpha = .6f)
+            CustomTab(
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+                selectedItemIndex = TimerOption.entries.indexOf(selectedTimerOption),
+                items = TimerOption.entries,
+                onClick = { option -> onTabClick(option) }
+            )
+            Spacer(modifier = Modifier.height(24.dp))
+
+            when(selectedTimerOption){
+                TimerOption.COUNT_DOWN -> CountdownConfiguration(
+                    title = uiState.title,
+                    note = uiState.note,
+                    setTime = uiState.setTime,
+                    onClose = onClose,
+                    onSaveChanges = { title, note, setTime ->
+                        if (setTime != uiState.setTime){
+                            updateSetTime(setTime)
+                            startCounting()
+                        }
+
+                        updateTitle(title)
+                        updateNote(note)
+                    }
                 )
-            )
-
-            Icon(
-                modifier = Modifier.size(16.dp),
-                imageVector = Icons.Default.KeyboardArrowDown,
-                contentDescription = null
-            )
-
+                else -> {}
+            }
         }
+
     }
 
 }
+
 

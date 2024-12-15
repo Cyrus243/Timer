@@ -1,24 +1,29 @@
-package org.indelible.counter.timer
+package org.indelible.counter.timers
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.TimerOff
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
+import org.indelible.counter.formattedZeroTimes
 
 @Composable
-fun TimerScreenContent(){
+fun TimerScreenContent(
+    hours: Int,
+    minutes: Int,
+    seconds: Int,
+    isRunning: Boolean,
+    onTimerReset: () -> Unit,
+    onPlayPauseClick: () -> Unit,
+){
 
     var shouldShowControl by remember {
         mutableStateOf(false)
@@ -46,7 +51,7 @@ fun TimerScreenContent(){
             ) {
                 Row {
                     Text(
-                        text = "00:00",
+                        text = "${hours.formattedZeroTimes()}:${minutes.formattedZeroTimes()}:${seconds.formattedZeroTimes()}",
                         fontSize = 132.sp
                     )
                 }
@@ -65,12 +70,12 @@ fun TimerScreenContent(){
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        OutlinedButton(onClick = {}) {
+                        OutlinedButton(onClick = { onTimerReset() }) {
                             Text(text = "Stop")
                         }
 
-                        FilledTonalButton(onClick = {}) {
-                            Text(text = if (true) "Pause" else "Start")
+                        FilledTonalButton(onClick = { onPlayPauseClick() }) {
+                            Text(text = if (isRunning) "Pause" else "Start")
                         }
                     }
                 }

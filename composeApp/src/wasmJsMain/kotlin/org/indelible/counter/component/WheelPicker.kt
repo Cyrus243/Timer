@@ -22,8 +22,12 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import kotlin.math.absoluteValue
 
+
+// Comment je fais pour recuperer the value selected ici --> faire remonter les lazyliststate des lazycolumn
+
 @Composable
 fun WheelTextPicker(
+    lazyListState: LazyListState,
     modifier: Modifier = Modifier,
     count: Int,
     rowCount: Int = 3,
@@ -32,6 +36,7 @@ fun WheelTextPicker(
         modifier = modifier,
         count = count,
         rowCount = rowCount,
+        lazyListState = lazyListState
     ){
         Text(text = it.toString())
     }
@@ -40,13 +45,12 @@ fun WheelTextPicker(
 @Composable
 fun WheelPicker(
     modifier: Modifier = Modifier,
-    startIndex: Int = 0,
+    lazyListState: LazyListState,
     count: Int,
     rowCount: Int,
     size: DpSize = DpSize(24.dp, 120.dp),
     content: @Composable LazyItemScope.(index: Int) -> Unit,
 ){
-    val lazyListState = rememberLazyListState(startIndex)
     val snapLayoutInfoProvider = remember(lazyListState) { SnapLayoutInfoProvider(lazyListState) }
     val flingBehavior = rememberSnapFlingBehavior(snapLayoutInfoProvider)
 

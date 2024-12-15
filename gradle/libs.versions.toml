@@ -8,6 +8,7 @@ kamel = "1.0.0-beta.7"
 ktor = "3.0.0"
 kotlinxSerializationJson = "1.7.3"
 timePicker="1.0.6"
+date-time = "0.6.0"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -19,6 +20,7 @@ kotlinX-serializationJson = { module = "org.jetbrains.kotlinx:kotlinx-serializat
 kamel-image = { module="media.kamel:kamel-image-default", version.ref="kamel" }
 ktor-client-core = { module = "io.ktor:ktor-client-core-wasm-js", version.ref = "ktor" }
 kotlinx-coroutines-core = {module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
+kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "date-time" }
 
 [plugins]
 composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "compose-multiplatform" }
