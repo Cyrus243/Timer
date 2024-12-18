@@ -10,8 +10,10 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.KeyboardArrowDown
@@ -33,7 +35,7 @@ import org.indelible.counter.component.WheelTextPicker
 import org.indelible.counter.models.TimerOption
 
 @Composable
-fun CountdownConfiguration(
+fun TimersConfiguration(
     title: String,
     note: String,
     setTime: LocalTime,
@@ -70,7 +72,12 @@ fun CountdownConfiguration(
                     }
                 }
         ){
-            Column(modifier = Modifier.fillMaxWidth()) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(bottom = 64.dp)
+                    .verticalScroll(rememberScrollState()),
+            ) {
                 Text(
                     text = "Timer title",
                     style = MaterialTheme.typography.titleSmall
@@ -159,31 +166,37 @@ fun CountdownConfiguration(
                 ImageRow(images)
             }
 
-            Row(
-                modifier = Modifier.align(Alignment.BottomEnd),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            Surface(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.BottomCenter),
             ) {
-                OutlinedButton(
-                    onClick = { onClose() },
-                    shape = RoundedCornerShape(8.dp),
+                Row(
+                    horizontalArrangement = Arrangement.End
                 ) {
-                    Text(
-                        text = "Cancel",
-                        style = MaterialTheme.typography.bodySmall
-                    )
-                }
+                    OutlinedButton(
+                        onClick = { onClose() },
+                        shape = RoundedCornerShape(8.dp),
+                    ) {
+                        Text(
+                            text = "Cancel",
+                            style = MaterialTheme.typography.bodySmall
+                        )
+                    }
+                    Spacer(modifier = Modifier.width(8.dp))
 
-                FilledTonalButton(
-                    onClick = {
-                        onSaveChanges(updatedTitle, updatedNote, updatedTime)
-                        onClose()
-                    },
-                    shape = RoundedCornerShape(8.dp)
-                ) {
-                    Text(
-                        text = "Save",
-                        style = MaterialTheme.typography.bodySmall
-                    )
+                    FilledTonalButton(
+                        onClick = {
+                            onSaveChanges(updatedTitle, updatedNote, updatedTime)
+                            onClose()
+                        },
+                        shape = RoundedCornerShape(8.dp)
+                    ) {
+                        Text(
+                            text = if (setTime != updatedTime) "Launch" else "Save",
+                            style = MaterialTheme.typography.bodySmall
+                        )
+                    }
                 }
             }
         }
@@ -241,7 +254,7 @@ fun DurationSelector(
 ){
 
     Box(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.requiredWidth(380.dp)
     ) {
         Surface(
             modifier = Modifier

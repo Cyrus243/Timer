@@ -108,11 +108,20 @@ fun TimerScreenContent(
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        OutlinedButton(onClick = { onTimerReset() }) {
+                        OutlinedButton(
+                            onClick = { onTimerReset() },
+                            colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.White)
+                        ) {
                             Text(text = "Stop")
                         }
 
-                        FilledTonalButton(onClick = { onPlayPauseClick() }) {
+                        FilledTonalButton(
+                            onClick = { onPlayPauseClick() },
+                            colors = ButtonDefaults.filledTonalButtonColors(
+                                contentColor = MaterialTheme.colorScheme.onPrimary,
+                                containerColor = MaterialTheme.colorScheme.primary
+                            )
+                        ) {
                             Text(text = if (isRunning) "Pause" else "Start")
                         }
                     }

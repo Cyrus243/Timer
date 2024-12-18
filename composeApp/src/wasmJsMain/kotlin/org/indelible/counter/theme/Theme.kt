@@ -86,6 +86,7 @@ fun CustomMaterialTheme(
     }
     MaterialTheme(
         colorScheme = colors,
-        content = content
+        content = content,
+        typography = getTypography()
     )
 }

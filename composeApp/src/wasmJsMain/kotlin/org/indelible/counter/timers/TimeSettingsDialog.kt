@@ -17,7 +17,7 @@ import org.indelible.counter.component.CustomTab
 import org.indelible.counter.models.TimerOption
 
 @Composable
-fun CustomDrawerSheet(
+fun TimerSettingsDialog(
     uiState: TimerViewModelState,
     onClose: () -> Unit,
     onTabClick: (TimerOption) -> Unit,
@@ -33,16 +33,16 @@ fun CustomDrawerSheet(
     Surface(
         modifier = Modifier
             .fillMaxHeight()
-            .requiredWidth(400.dp),
-        shape = RoundedCornerShape(topStart = 16.dp, bottomStart = 16.dp),
+            .padding(vertical = 48.dp)
+            .requiredWidth(600.dp),
+        shape = RoundedCornerShape(16.dp),
         shadowElevation = DrawerDefaults.ModalDrawerElevation
     ) {
 
         Column(
             modifier = Modifier
-                .fillMaxHeight()
+                .fillMaxSize()
                 .padding(16.dp)
-                .requiredWidth(400.dp)
         ) {
             IconButton(
                 modifier = Modifier.align(Alignment.End),
@@ -59,7 +59,7 @@ fun CustomDrawerSheet(
             )
             Spacer(modifier = Modifier.height(24.dp))
 
-            CountdownConfiguration(
+            TimersConfiguration(
                 title = uiState.title,
                 note = uiState.note,
                 setTime = uiState.setTime,
