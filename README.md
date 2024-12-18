@@ -21,7 +21,6 @@ This project is an experimental web application built using Kotlin Multiplatform
 - **ViewModel:** for managing UI-related data in a lifecycle-conscious way.
 - **kotlinx.coroutines:** for managing asynchronous programming and coroutines in Kotlin.
 - **Kamel:** to load images from url.
-- **kotlinx.datetime:**
 
 ## Screenshot
 
@@ -35,7 +34,7 @@ Check out the live demo here:
 #### 1. Clone the repository
 
 ```shell
-git clone https://github.com/your-username/flexbox-labs.git
+git clone https://github.com/Cyrus243/Timer.git
 ```
 
 #### 2. open in the latest version of intelli J IDEA ultimate
