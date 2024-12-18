@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.kamel.image.KamelImage
@@ -74,7 +75,9 @@ fun TimerScreenContent(
 
                 if (note.isNotEmpty()) {
                     Text(
+                        modifier = Modifier.width(700.dp),
                         text = note,
+                        textAlign = TextAlign.Center,
                         style = MaterialTheme.typography.labelMedium.copy(color = Color.White.copy(alpha = .6f))
                     )
                     Spacer(modifier = Modifier.height(16.dp))
