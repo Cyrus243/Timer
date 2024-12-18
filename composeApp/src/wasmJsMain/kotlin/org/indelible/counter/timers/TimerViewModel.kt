@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalTime
+import org.indelible.counter.compareToMin
 import org.indelible.counter.models.TimerOption
 import org.indelible.counter.plusSecond
 
@@ -69,6 +70,14 @@ class TimerViewModel: ViewModel() {
         )
     }
 
+    fun addImageBackground(image: String){
+        _uiState.update {
+            it.copy(selectedBackground = it.selectedBackground.toMutableList().also {
+                it.add(image)
+            })
+        }
+    }
+
     fun startCounting(){
         timerJob?.cancel()
         resetTimer()
@@ -84,6 +93,10 @@ class TimerViewModel: ViewModel() {
             while (!uiState.value.isPaused){
                 updateCurrentTime(uiState.value.currentTime.plusSecond(increment))
                 delay(1000)
+                if (uiState.value.currentTime.compareToMin()){
+                    pauseTimer()
+                    return@launch
+                }
             }
         }
     }
@@ -95,5 +108,12 @@ data class TimerViewModelState(
     val title: String = "",
     val note: String = "",
     val isPaused: Boolean = true,
+    val selectedBackground: List<String> = defaultBackGround,
     val timerOption: TimerOption = TimerOption.COUNT_DOWN,
+)
+
+private val defaultBackGround = listOf(
+    "https://cdn.pixabay.com/photo/2023/01/08/05/52/sunset-7704594_1280.jpg",
+    "https://cdn.pixabay.com/photo/2016/05/24/16/48/mountains-1412683_1280.png",
+    "https://cdn.pixabay.com/photo/2015/01/28/23/35/hills-615429_1280.jpg"
 )

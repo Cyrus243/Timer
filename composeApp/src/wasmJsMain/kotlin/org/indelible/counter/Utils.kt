@@ -17,8 +17,8 @@ fun LocalTime.plusSecond(seconds: Int): LocalTime {
     return LocalTime(newHour, newMinute, newSecond)
 }
 
-fun LocalTime.min(): LocalTime {
-    return LocalTime(0, 0)
+fun LocalTime.compareToMin(): Boolean {
+    return this == LocalTime(0, 0)
 }
 
 fun Int.formattedZeroTimes(): String {
@@ -28,5 +28,6 @@ fun Int.formattedZeroTimes(): String {
         this.toString()
     }
 }
+
 
 

@@ -1,4 +1,3 @@
-import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 
@@ -51,8 +50,9 @@ kotlin {
 
             //date and time
             implementation(libs.kotlinx.datetime)
-
+            implementation("org.jetbrains.kotlinx:kotlinx-html:0.11.0")
         }
+
     }
 }
 

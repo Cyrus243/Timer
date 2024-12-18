@@ -1,18 +1,62 @@
-This is a Kotlin Multiplatform project targeting Web.
 
-* `/composeApp` is for code that will be shared across your Compose Multiplatform applications.
-  It contains several subfolders:
-  - `commonMain` is for code that’s common for all targets.
-  - Other folders are for Kotlin code that will be compiled for only the platform indicated in the folder name.
-    For example, if you want to use Apple’s CoreCrypto for the iOS part of your Kotlin app,
-    `iosMain` would be the right folder for such calls.
+## About
+This project is an experimental web application built using Kotlin Multiplatform and WebAssembly. The app is a flexible and nice online timer with countdown and chronometer features. It provides a smooth and fast experience.
 
+## Key Features
 
-Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html),
-[Compose Multiplatform](https://github.com/JetBrains/compose-multiplatform/#compose-multiplatform),
-[Kotlin/Wasm](https://kotl.in/wasm/)…
+- **Countdown Timer:** Set a specific time and watch it count down to zero, with smooth animations and precise timekeeping.
+- **Chronometer:** Utilize the app as a stopwatch to track elapsed time with options to start, pause, and reset.
+- **Customizable Titles and Descriptions:** Add meaningful context to your timer by setting a title and description for each session.
+- **Customizable Background Images:** Personalize the timer with your own images or choose from a predefined selection to match your style.
+- **Customizable Timer Styles:** Tailor the appearance of the timer, including fonts, colors, and layouts, to create a unique aesthetic.
 
-We would appreciate your feedback on Compose/Web and Kotlin/Wasm in the public Slack channel [#compose-web](https://slack-chats.kotlinlang.org/c/compose-web).
-If you face any issues, please report them on [GitHub](https://github.com/JetBrains/compose-multiplatform/issues).
+## Technology Stack
 
+[![Kotlin][kotlin-image]][kotlin-url]
+[![Wasm][wasm-image]][wasm-url]
+[![coroutine][coroutines-image]][coroutines-url]
+
+- **Kotlin:** The primary programming language used for this project.
+- **Compose Multiplatform:** for UI
+- **ViewModel:** for managing UI-related data in a lifecycle-conscious way.
+- **kotlinx.coroutines:** for managing asynchronous programming and coroutines in Kotlin.
+- **Kamel:** to load images from url.
+- **kotlinx.datetime:**
+
+## Screenshot
+
+## Motivation
+This project was created as a learning exercise to explore and understand the capabilities of KMM/WASM. The goal was to gain hands-on experience with modern web and cross-platform development technologies while building a functional and beautiful application.
+## Live Demo
+Check out the live demo here: 
+
+## Getting Started
+
+#### 1. Clone the repository
+
+```shell
+git clone https://github.com/your-username/flexbox-labs.git
+```
+
+#### 2. open in the latest version of intelli J IDEA ultimate
+
+#### 3. Run the app on your device or emulator
 You can open the web application by running the `:composeApp:wasmJsBrowserDevelopmentRun` Gradle task.
+
+
+## Contributing 
+Contributions are welcome! If you have ideas or improvements, feel free to open an issue, provide valuable feedback or submit a pull request.
+
+
+
+
+
+
+[kotlin-image]: https://img.shields.io/badge/kotlin-multiplatform?style=for-the-badge&logo=kotlin&color=%2326282c
+[wasm-image]: https://img.shields.io/badge/wasm-2?style=for-the-badge&logo=webassembly&color=%23eaecf0
+[coroutines-image]: https://img.shields.io/badge/kotlinx.Coroutines-3?style=for-the-badge&logo=Coroutines&color=%2326282c
+
+
+[kotlin-url]: https://kotlinlang.org/docs/wasm-overview.html
+[wasm-url]: https://webassembly.org/
+[coroutines-url]: https://kotlinlang.org/docs/coroutines-overview.html
