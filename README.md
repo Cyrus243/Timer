@@ -31,7 +31,7 @@ This project is an experimental web application built using Kotlin Multiplatform
 ## Motivation
 This project was created as a learning exercise to explore and understand the capabilities of KMM/WASM. The goal was to gain hands-on experience with modern web and cross-platform development technologies while building a functional and beautiful application.
 ## Live Demo
-Check out the live demo here: 
+Check out the live demo here: [Demo](https://cyrus243.github.io/Timer/)
 
 ## Getting Started
 
