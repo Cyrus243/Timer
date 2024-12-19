@@ -193,7 +193,10 @@ fun TimersConfiguration(
                         shape = RoundedCornerShape(8.dp)
                     ) {
                         Text(
-                            text = if (setTime != updatedTime) "Launch" else "Save",
+                            text = if (setTime != updatedTime || selectedOption == TimerOption.CHRONOMETER)
+                                "Launch"
+                            else
+                                "Save",
                             style = MaterialTheme.typography.bodySmall
                         )
                     }
